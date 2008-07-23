@@ -1,6 +1,6 @@
 diff -ru a/include/linux/hid.h b/include/linux/hid.h
 --- a/include/linux/hid.h	2008-06-27 03:49:54.000000000 +0400
-+++ b/include/linux/hid.h	2008-07-21 17:20:27.000000000 +0400
++++ b/include/linux/hid.h	2008-07-21 17:59:43.000000000 +0400
 @@ -297,6 +297,7 @@
  #define HID_QUIRK_RDESC_MACBOOK_JIS		0x00000010
  #define HID_QUIRK_RDESC_BUTTON_CONSUMER		0x00000020
@@ -11,7 +11,7 @@ diff -ru a/include/linux/hid.h b/include/linux/hid.h
   * This is the global environment of the parser. This information is
 diff -ru a/drivers/hid/usbhid/hid-quirks.c b/drivers/hid/usbhid/hid-quirks.c
 --- a/drivers/hid/usbhid/hid-quirks.c	2008-06-27 03:49:54.000000000 +0400
-+++ b/drivers/hid/usbhid/hid-quirks.c	2008-07-21 17:29:05.000000000 +0400
++++ b/drivers/hid/usbhid/hid-quirks.c	2008-07-21 21:58:55.000000000 +0400
 @@ -383,6 +383,9 @@
  #define USB_VENDOR_ID_TURBOX		0x062a
  #define USB_DEVICE_ID_TURBOX_KEYBOARD	0x0201
@@ -56,7 +56,7 @@ diff -ru a/drivers/hid/usbhid/hid-quirks.c b/drivers/hid/usbhid/hid-quirks.c
 +	if (rsize != 212)
 +		return;
 +
-+	info("Fixing up UC-LOGIC tablet report descriptor");
++	printk(KERN_INFO "Fixing up UC-LOGIC tablet report descriptor\n");
 +
 +	/*
 +	 * Cut off the first input descriptor (out of 3)
