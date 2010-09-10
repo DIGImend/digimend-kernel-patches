@@ -1,0 +1,38 @@
+From 53df3c9f845d0013a2ac4fdead1ef8fde36142df Mon Sep 17 00:00:00 2001
+From: Nikolai Kondrashov <spbnick@gmail.com>
+Date: Fri, 6 Aug 2010 23:03:07 +0400
+Subject: [PATCH 3/5] HID: Add Tablet Pick -> BTN_STYLUS2 mapping
+
+Many tablet input drivers use BTN_STYLUS2 code to report a second
+tablet stylus button. Yet, the generic HID input driver doesn't map it.
+Apparently, because there is no corresponding usage in the HID Usage Tables.
+
+This patch selects a compromise usage - "Tablet Pick" (0x46) to be mapped to
+BTN_STYLUS2. Some tablets use "Eraser" usage, but mapping it to a button
+wouldn't be entirely correct, because the specification says it may be "a
+pressure quantity".
+
+Signed-off-by: Nikolai Kondrashov <spbnick@gmail.com>
+Signed-off-by: Jiri Kosina <jkosina@suse.cz>
+---
+ drivers/hid/hid-input.c |    4 ++++
+ 1 files changed, 4 insertions(+), 0 deletions(-)
+
+diff --git a/drivers/hid/hid-input.c b/drivers/hid/hid-input.c
+index 6c03dcc..0c2908f 100644
+--- a/drivers/hid/hid-input.c
++++ b/drivers/hid/hid-input.c
+@@ -336,6 +336,10 @@ static void hidinput_configure_usage(struct hid_input *hidinput, struct hid_fiel
+ 			map_key_clear(BTN_STYLUS);
+ 			break;
+ 
++		case 0x46: /* TabletPick */
++			map_key_clear(BTN_STYLUS2);
++			break;
++
+ 		default:  goto unknown;
+ 		}
+ 		break;
+-- 
+1.7.1
+
