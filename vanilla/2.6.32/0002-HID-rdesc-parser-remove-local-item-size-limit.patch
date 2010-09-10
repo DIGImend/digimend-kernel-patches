@@ -1,0 +1,44 @@
+From 4e8863903c285a06015d93945d5448839f2216c4 Mon Sep 17 00:00:00 2001
+From: Nikolai Kondrashov <spbnick@gmail.com>
+Date: Fri, 10 Sep 2010 23:51:04 +0400
+Subject: [PATCH 2/5] HID: rdesc parser: remove local item size limit
+
+The HID report descriptor parser requires local items to have data. I.e. to
+have non-zero size. This removes the restriction.
+
+The HID specification doesn't seem to have such restriction and, for
+example, a "usage" item could have zero size if the usage ID is zero.
+At least one usage page - Keyboard/Keypad lists zero ID as valid.
+
+This doesn't seem to happen in the wild, probably because the official tool
+for authoring report descriptors always puts data even for zero values for
+some items, including "usage" items.
+
+However, this makes little sense and at least one open source tool for
+descriptor authoring generates zero data size "usage" items, which saves
+some space, especially if many such items are used in a descriptor.
+
+Signed-off-by: Nikolai Kondrashov <spbnick@gmail.com>
+---
+ drivers/hid/hid-core.c |    5 -----
+ 1 files changed, 0 insertions(+), 5 deletions(-)
+
+diff --git a/drivers/hid/hid-core.c b/drivers/hid/hid-core.c
+index 4933d8e..d18174a 100644
+--- a/drivers/hid/hid-core.c
++++ b/drivers/hid/hid-core.c
+@@ -389,11 +389,6 @@ static int hid_parser_local(struct hid_parser *parser, struct hid_item *item)
+ 	__u32 data;
+ 	unsigned n;
+ 
+-	if (item->size == 0) {
+-		dbg_hid("item data expected for local item\n");
+-		return -1;
+-	}
+-
+ 	data = item_udata(item);
+ 
+ 	switch (item->tag) {
+-- 
+1.7.1
+
