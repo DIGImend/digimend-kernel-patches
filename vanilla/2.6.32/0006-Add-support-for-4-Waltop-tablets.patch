@@ -1,7 +1,7 @@
-From 9dda2dacd8874e70c0bad4db917ae8efa3373ba7 Mon Sep 17 00:00:00 2001
+From df6af30edbcdc7312247517ab998dcca4210f98c Mon Sep 17 00:00:00 2001
 From: Nikolai Kondrashov <spbnick@gmail.com>
 Date: Sat, 11 Sep 2010 00:03:18 +0400
-Subject: [PATCH 5/5] Add support for 4 Waltop tablets
+Subject: [PATCH 6/6] Add support for 4 Waltop tablets
 
 Add support for 4 Waltop tablets by fixing their report descriptors.
 The tablets supported are:
@@ -1200,5 +1200,5 @@ index ff2e78b..ca29dcf 100644
  	{ USB_VENDOR_ID_WISEGROUP, USB_DEVICE_ID_QUAD_USB_JOYPAD, HID_QUIRK_NOGET | HID_QUIRK_MULTI_INPUT },
  
 -- 
-1.7.1
+1.7.2.3
 

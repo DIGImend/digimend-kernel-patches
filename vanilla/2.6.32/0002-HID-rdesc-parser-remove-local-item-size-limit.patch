@@ -1,7 +1,7 @@
-From 4e8863903c285a06015d93945d5448839f2216c4 Mon Sep 17 00:00:00 2001
+From bc7168944c6e207aff82181af0af85e9435c40d9 Mon Sep 17 00:00:00 2001
 From: Nikolai Kondrashov <spbnick@gmail.com>
 Date: Fri, 10 Sep 2010 23:51:04 +0400
-Subject: [PATCH 2/5] HID: rdesc parser: remove local item size limit
+Subject: [PATCH 2/6] HID: rdesc parser: remove local item size limit
 
 The HID report descriptor parser requires local items to have data. I.e. to
 have non-zero size. This removes the restriction.
@@ -40,5 +40,5 @@ index 4933d8e..d18174a 100644
  
  	switch (item->tag) {
 -- 
-1.7.1
+1.7.2.3
 

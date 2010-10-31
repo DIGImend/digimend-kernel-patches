@@ -1,7 +1,7 @@
-From 3d6755d63f469b29ff22f10c7bdc8ef95a00ec9f Mon Sep 17 00:00:00 2001
+From 41e549797250233e6069252ba688cce4a2ad5a32 Mon Sep 17 00:00:00 2001
 From: Nikolai Kondrashov <spbnick@gmail.com>
 Date: Fri, 10 Sep 2010 23:48:10 +0400
-Subject: [PATCH 1/5] HID: allow resizing and replacing report descriptors
+Subject: [PATCH 1/6] HID: allow resizing and replacing report descriptors
 
 Update hid_driver's report_fixup prototype to allow changing report
 descriptor size and/or returning completely different report descriptor.
@@ -361,5 +361,5 @@ index 10f6284..29ee94a 100644
  	int (*input_mapping)(struct hid_device *hdev,
  			struct hid_input *hidinput, struct hid_field *field,
 -- 
-1.7.1
+1.7.2.3
 
