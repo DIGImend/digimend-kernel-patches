@@ -1,7 +1,7 @@
-From 53df3c9f845d0013a2ac4fdead1ef8fde36142df Mon Sep 17 00:00:00 2001
+From 435734dd41450467d6918feeeb84fed798fcbae0 Mon Sep 17 00:00:00 2001
 From: Nikolai Kondrashov <spbnick@gmail.com>
 Date: Fri, 6 Aug 2010 23:03:07 +0400
-Subject: [PATCH 3/5] HID: Add Tablet Pick -> BTN_STYLUS2 mapping
+Subject: [PATCH 3/6] HID: Add Tablet Pick -> BTN_STYLUS2 mapping
 
 Many tablet input drivers use BTN_STYLUS2 code to report a second
 tablet stylus button. Yet, the generic HID input driver doesn't map it.
@@ -34,5 +34,5 @@ index 6c03dcc..0c2908f 100644
  		}
  		break;
 -- 
-1.7.1
+1.7.2.3
 

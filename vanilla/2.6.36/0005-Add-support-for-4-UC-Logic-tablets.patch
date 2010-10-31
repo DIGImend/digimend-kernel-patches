@@ -1,7 +1,7 @@
-From 5bfbfddc527e3bd3993ab29d9a03f259ff53faa5 Mon Sep 17 00:00:00 2001
+From ca030954e336ac2b0768297852b7c29c16a47d43 Mon Sep 17 00:00:00 2001
 From: Nikolai Kondrashov <spbnick@gmail.com>
-Date: Fri, 10 Sep 2010 20:50:31 +0400
-Subject: [PATCH 4/5] Add support for 4 UC-Logic tablets
+Date: Thu, 21 Oct 2010 18:05:36 +0400
+Subject: [PATCH 5/6] Add support for 4 UC-Logic tablets
 
 Add support for four UC-Logic tablets by fixing their report descriptors.
 The tablets supported are: WP4030U, WP5540U, WP8060U, PF1209.
@@ -47,10 +47,10 @@ index 46f037f..8c4a510 100644
  obj-$(CONFIG_HID_ZYDACRON)	+= hid-zydacron.o
  obj-$(CONFIG_HID_WACOM)		+= hid-wacom.o
 diff --git a/drivers/hid/hid-core.c b/drivers/hid/hid-core.c
-index 02b04e3..746d4ad 100644
+index 1c22ce5..f8a9c0e 100644
 --- a/drivers/hid/hid-core.c
 +++ b/drivers/hid/hid-core.c
-@@ -1378,6 +1378,10 @@ static const struct hid_device_id hid_blacklist[] = {
+@@ -1382,6 +1382,10 @@ static const struct hid_device_id hid_blacklist[] = {
  	{ HID_USB_DEVICE(USB_VENDOR_ID_TOPSEED, USB_DEVICE_ID_TOPSEED_CYBERLINK) },
  	{ HID_USB_DEVICE(USB_VENDOR_ID_TOPSEED2, USB_DEVICE_ID_TOPSEED2_RF_COMBO) },
  	{ HID_USB_DEVICE(USB_VENDOR_ID_TWINHAN, USB_DEVICE_ID_TWINHAN_IR_REMOTE) },
@@ -62,21 +62,21 @@ index 02b04e3..746d4ad 100644
  	{ HID_BLUETOOTH_DEVICE(USB_VENDOR_ID_WACOM, USB_DEVICE_ID_WACOM_GRAPHIRE_BLUETOOTH) },
  	{ HID_USB_DEVICE(USB_VENDOR_ID_ZEROPLUS, 0x0005) },
 diff --git a/drivers/hid/hid-ids.h b/drivers/hid/hid-ids.h
-index 85c6d13..720e497 100644
+index c5ae5f1..cbc18c6 100644
 --- a/drivers/hid/hid-ids.h
 +++ b/drivers/hid/hid-ids.h
-@@ -507,6 +507,8 @@
+@@ -512,6 +512,8 @@
  #define USB_VENDOR_ID_UCLOGIC		0x5543
  #define USB_DEVICE_ID_UCLOGIC_TABLET_PF1209	0x0042
  #define USB_DEVICE_ID_UCLOGIC_TABLET_WP4030U	0x0003
 +#define USB_DEVICE_ID_UCLOGIC_TABLET_WP5540U	0x0004
 +#define USB_DEVICE_ID_UCLOGIC_TABLET_WP8060U	0x0005
+ #define USB_DEVICE_ID_UCLOGIC_TABLET_KNA5	0x6001
  
  #define USB_VENDOR_ID_VERNIER		0x08f7
- #define USB_DEVICE_ID_VERNIER_LABPRO	0x0001
 diff --git a/drivers/hid/hid-uclogic.c b/drivers/hid/hid-uclogic.c
 new file mode 100644
-index 0000000..05fdc85
+index 0000000..05fdc85a
 --- /dev/null
 +++ b/drivers/hid/hid-uclogic.c
 @@ -0,0 +1,623 @@
@@ -704,19 +704,19 @@ index 0000000..05fdc85
 +module_exit(uclogic_exit);
 +MODULE_LICENSE("GPL");
 diff --git a/drivers/hid/usbhid/hid-quirks.c b/drivers/hid/usbhid/hid-quirks.c
-index 2643d31..162aa4b 100644
+index f0260c6..2663dcb 100644
 --- a/drivers/hid/usbhid/hid-quirks.c
 +++ b/drivers/hid/usbhid/hid-quirks.c
-@@ -68,7 +68,8 @@ static const struct hid_blacklist {
+@@ -70,7 +70,8 @@ static const struct hid_blacklist {
  	{ USB_VENDOR_ID_SUN, USB_DEVICE_ID_RARITAN_KVM_DONGLE, HID_QUIRK_NOGET },
  	{ USB_VENDOR_ID_TURBOX, USB_DEVICE_ID_TURBOX_KEYBOARD, HID_QUIRK_NOGET },
  	{ USB_VENDOR_ID_UCLOGIC, USB_DEVICE_ID_UCLOGIC_TABLET_PF1209, HID_QUIRK_MULTI_INPUT },
 -	{ USB_VENDOR_ID_UCLOGIC, USB_DEVICE_ID_UCLOGIC_TABLET_WP4030U, HID_QUIRK_MULTI_INPUT },
 +	{ USB_VENDOR_ID_UCLOGIC, USB_DEVICE_ID_UCLOGIC_TABLET_WP5540U, HID_QUIRK_MULTI_INPUT },
 +	{ USB_VENDOR_ID_UCLOGIC, USB_DEVICE_ID_UCLOGIC_TABLET_WP8060U, HID_QUIRK_MULTI_INPUT },
+ 	{ USB_VENDOR_ID_UCLOGIC, USB_DEVICE_ID_UCLOGIC_TABLET_KNA5, HID_QUIRK_MULTI_INPUT },
  	{ USB_VENDOR_ID_WISEGROUP, USB_DEVICE_ID_DUAL_USB_JOYPAD, HID_QUIRK_NOGET | HID_QUIRK_MULTI_INPUT | HID_QUIRK_SKIP_OUTPUT_REPORTS },
  	{ USB_VENDOR_ID_WISEGROUP, USB_DEVICE_ID_QUAD_USB_JOYPAD, HID_QUIRK_NOGET | HID_QUIRK_MULTI_INPUT },
- 
 -- 
-1.7.1
+1.7.2.3
 
