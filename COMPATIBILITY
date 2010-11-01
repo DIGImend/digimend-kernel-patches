@@ -1,13 +1,13 @@
-VID:PID     Original model              Rebranded models*               2.6.36-rc3      2.6.35          2.6.32
+VID:PID     Original model              Rebranded models*               2.6.36          2.6.35          2.6.32
 
-5543:0003   UC-Logic Tablet WP4030U     Trust item #16486               OK              UNTESTED        UNTESTED
+5543:0003   UC-Logic Tablet WP4030U     Trust item #16486               UNTESTED        UNTESTED        UNTESTED
                                         Genius MousePen 4x3
                                         Aquila L1
                                         Manhattan 3"x4"**
                                         Monoprice 4X3**
                                         Iball Pen Tablet 4030U**
 
-5543:0004   UC-Logic Tablet WP5540U     Trust item #15356               OK              UNTESTED        UNTESTED
+5543:0004   UC-Logic Tablet WP5540U     Trust item #15356               UNTESTED        UNTESTED        UNTESTED
                                         Genius MousePen 5x4
                                         Adesso CyberTablet Z7**
                                         DigiPro WP5540**
@@ -18,16 +18,16 @@ VID:PID     Original model              Rebranded models*               2.6.36-r
                                         Manhattan 8"x6"**
                                         Iball Pen Tablet 8060U**
 
-5543:0042   UC-Logic Tablet PF1209      Genius PenSketch 12x9           OK              UNTESTED        UNTESTED
+5543:0042   UC-Logic Tablet PF1209      Genius PenSketch 12x9           UNTESTED        UNTESTED        UNTESTED
                                         Adesso CyberTablet 12000**
                                         Adesso CT-12000A**
                                         Iball Design Tablet PF1209**
 
-172f:0032   Waltop Slim Tablet 5.8"     Genius G-Pen F350               OK              UNTESTED        UNTESTED
+172f:0032   Waltop Slim Tablet 5.8"     Genius G-Pen F350               UNTESTED        UNTESTED        UNTESTED
                                         Trust item #16485
                                         VisTablet Mini**
 
-172f:0034   Waltop Slim Tablet 12.1"    Genius G-Pen F610               UNTESTED        UNTESTED        OK
+172f:0034   Waltop Slim Tablet 12.1"    Genius G-Pen F610               UNTESTED        UNTESTED        UNTESTED
                                         VisTablet Original 12"**
                                         Adesso CyberTablet Z12**
                                         Adesso CT-Z12A**
@@ -36,13 +36,13 @@ VID:PID     Original model              Rebranded models*               2.6.36-r
 
 172f:0501   Waltop Media Tablet 10.6"   Genius G-Pen M609               limited wheel   limited wheel   limited wheel
                                         Genius G-Pen M609X              functions,      functions,      functions,
-                                                                        otherwise OK    UNTESTED        UNTESTED
+                                                                        UNTESTED        UNTESTED        UNTESTED
 
 172f:0500   Waltop Media Tablet 14.1"   Genius G-Pen M712               limited wheel   limited wheel   limited wheel
                                         Genius G-Pen M712X              functions,      functions,      functions,
                                         Trust item #15358**             crippled        crippled        crippled
                                         Adesso CyberTablet M14**        resolution,     resolution,     resolution,
-                                                                        otherwise OK    UNTESTED        UNTESTED
+                                                                        UNTESTED        UNTESTED        UNTESTED
 
 *   This is not an exhaustive list, there are very likely more rebranded
     tablets which are actually supported.
