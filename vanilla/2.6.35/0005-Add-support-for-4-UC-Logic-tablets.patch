@@ -1,7 +1,7 @@
-From c42ebc79f67262cb8067ddd056336e49ad369354 Mon Sep 17 00:00:00 2001
+From 640575eadb80e139c2262a6b1b80a91109a4ac21 Mon Sep 17 00:00:00 2001
 From: Nikolai Kondrashov <spbnick@gmail.com>
 Date: Fri, 10 Sep 2010 21:21:50 +0400
-Subject: [PATCH 4/5] Add support for 4 UC-Logic tablets
+Subject: [PATCH 5/6] Add support for 4 UC-Logic tablets
 
 Add support for four UC-Logic tablets by fixing their report descriptors.
 The tablets supported are: WP4030U, WP5540U, WP8060U, PF1209.
@@ -76,7 +76,7 @@ index 31601ee..201cc9d 100644
  #define USB_DEVICE_ID_VERNIER_LABPRO	0x0001
 diff --git a/drivers/hid/hid-uclogic.c b/drivers/hid/hid-uclogic.c
 new file mode 100644
-index 0000000..05fdc85
+index 0000000..05fdc85a
 --- /dev/null
 +++ b/drivers/hid/hid-uclogic.c
 @@ -0,0 +1,623 @@
@@ -718,5 +718,5 @@ index 5f5aa39..e6c5242 100644
  	{ USB_VENDOR_ID_WISEGROUP, USB_DEVICE_ID_QUAD_USB_JOYPAD, HID_QUIRK_NOGET | HID_QUIRK_MULTI_INPUT },
  
 -- 
-1.7.1
+1.7.2.3
 
