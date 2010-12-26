@@ -1,3 +1,8 @@
+2010-12-26: 0.4
+    * Fix absolute axis resolution calculation patch to produce units/mm
+      instead of units/inch for ABS_[XYZ].
+    * Add 4 more tablets to compatibility table.
+
 2010-11-26: 0.3
     * Added HID absolute axis resolution calculation patch.
     * Supported kernel versions:
