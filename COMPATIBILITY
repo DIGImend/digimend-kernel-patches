@@ -20,6 +20,7 @@ VID:PID     Original model              Rebranded models*               2.6.36  
                                         DigiPro WP8060**
                                         Manhattan 8"x6"**
                                         Iball Pen Tablet 8060U**
+                                        NGS Draw Master
 
 5543:0042   UC-Logic Tablet PF1209      Genius PenSketch 12x9           UNTESTED        UNTESTED        UNTESTED
                                         Adesso CyberTablet 12000**
@@ -29,6 +30,7 @@ VID:PID     Original model              Rebranded models*               2.6.36  
 172f:0032   Waltop Slim Tablet 5.8"     Genius G-Pen F350               UNTESTED        UNTESTED        UNTESTED
                                         Trust item #16485
                                         VisTablet Mini**
+                                        iVistaTablet Slim 5.8**
 
 172f:0034   Waltop Slim Tablet 12.1"    Genius G-Pen F610               UNTESTED        UNTESTED        UNTESTED
                                         Trust item #16529
@@ -37,16 +39,24 @@ VID:PID     Original model              Rebranded models*               2.6.36  
                                         Adesso CT-Z12A**
                                         PenPower Tooya Pro**
                                         Aiptek Slim 12.1 Inch**
+                                        NGS Slim Pro**
+                                        iVistaTablet Slim 12.1**
+
+172f:0037   Waltop Q Pad                Aiptek HyperPen Mini            UNSUPPORTED     UNSUPPORTED     UNSUPPORTED
+                                        NGS Flexi Style**
+                                        VisTablet PenPad**
+                                        iVistaTablet Q Flex Pad**
+                                        Bravod Q-PD65-S**
 
 172f:0501   Waltop Media Tablet 10.6"   Genius G-Pen M609               limited wheel   limited wheel   limited wheel
                                         Genius G-Pen M609X              functions,      functions,      functions,
-                                                                        UNTESTED        UNTESTED        UNTESTED
+                                        iVista Media Tablet 10.6**      UNTESTED        UNTESTED        UNTESTED
 
 172f:0500   Waltop Media Tablet 14.1"   Genius G-Pen M712               limited wheel   limited wheel   limited wheel
                                         Genius G-Pen M712X              functions,      functions,      functions,
                                         Trust item #15358**             crippled        crippled        crippled
                                         Adesso CyberTablet M14**        resolution,     resolution,     resolution,
-                                                                        UNTESTED        UNTESTED        UNTESTED
+                                        iVista Media Tablet 14.1**      UNTESTED        UNTESTED        UNTESTED
 
 *   This is not an exhaustive list, there are very likely more rebranded
     tablets which are actually supported.
