@@ -1,10 +1,11 @@
-From ed990c6eb331a24cc1b4915c7358f9ceddcea43b Mon Sep 17 00:00:00 2001
+From f6d5adf67ab72325baad1d16fac0fc4b31af357a Mon Sep 17 00:00:00 2001
 From: Nikolai Kondrashov <spbnick@gmail.com>
-Date: Fri, 10 Sep 2010 20:54:05 +0400
-Subject: [PATCH 6/6] Add support for 4 Waltop tablets
+Date: Fri, 10 Sep 2010 21:29:01 +0400
+Subject: [PATCH 6/6] Add support for 5 Waltop tablets
 
-Add support for 4 Waltop tablets by fixing their report descriptors.
+Add support for 5 Waltop tablets by fixing their report descriptors.
 The tablets supported are:
+Q Pad,
 Slim Tablet 5.8",
 Slim Tablet 12.1",
 Media Tablet 10.6",
@@ -14,18 +15,18 @@ Signed-off-by: Nikolai Kondrashov <spbnick@gmail.com>
 ---
  drivers/hid/Kconfig             |    6 +
  drivers/hid/Makefile            |    1 +
- drivers/hid/hid-core.c          |    4 +
- drivers/hid/hid-ids.h           |    6 +
- drivers/hid/hid-waltop.c        | 1098 +++++++++++++++++++++++++++++++++++++++
+ drivers/hid/hid-core.c          |    5 +
+ drivers/hid/hid-ids.h           |    7 +
+ drivers/hid/hid-waltop.c        | 1290 +++++++++++++++++++++++++++++++++++++++
  drivers/hid/usbhid/hid-quirks.c |    2 +
- 6 files changed, 1117 insertions(+), 0 deletions(-)
+ 6 files changed, 1311 insertions(+), 0 deletions(-)
  create mode 100644 drivers/hid/hid-waltop.c
 
 diff --git a/drivers/hid/Kconfig b/drivers/hid/Kconfig
-index 34402bb..4cae11e 100644
+index 507d016..d167eca 100644
 --- a/drivers/hid/Kconfig
 +++ b/drivers/hid/Kconfig
-@@ -182,6 +182,12 @@ config HID_UCLOGIC
+@@ -168,6 +168,12 @@ config HID_UCLOGIC
  	---help---
  	Support for UC-Logic tablets.
  
@@ -39,10 +40,10 @@ index 34402bb..4cae11e 100644
  	tristate "Gyration"
  	depends on USB_HID
 diff --git a/drivers/hid/Makefile b/drivers/hid/Makefile
-index 8c4a510..c46c7a1 100644
+index 4dfbec3..39b0546 100644
 --- a/drivers/hid/Makefile
 +++ b/drivers/hid/Makefile
-@@ -65,6 +65,7 @@ obj-$(CONFIG_HID_UCLOGIC)	+= hid-uclogic.o
+@@ -63,6 +63,7 @@ obj-$(CONFIG_HID_UCLOGIC)	+= hid-uclogic.o
  obj-$(CONFIG_HID_ZEROPLUS)	+= hid-zpff.o
  obj-$(CONFIG_HID_ZYDACRON)	+= hid-zydacron.o
  obj-$(CONFIG_HID_WACOM)		+= hid-wacom.o
@@ -51,31 +52,33 @@ index 8c4a510..c46c7a1 100644
  obj-$(CONFIG_USB_HID)		+= usbhid/
  obj-$(CONFIG_USB_MOUSE)		+= usbhid/
 diff --git a/drivers/hid/hid-core.c b/drivers/hid/hid-core.c
-index f8a9c0e..7f25ae1 100644
+index 5721bae..898780f 100644
 --- a/drivers/hid/hid-core.c
 +++ b/drivers/hid/hid-core.c
-@@ -1388,6 +1388,10 @@ static const struct hid_device_id hid_blacklist[] = {
- 	{ HID_USB_DEVICE(USB_VENDOR_ID_UCLOGIC, USB_DEVICE_ID_UCLOGIC_TABLET_WP8060U) },
+@@ -1377,6 +1377,11 @@ static const struct hid_device_id hid_blacklist[] = {
  	{ HID_USB_DEVICE(USB_VENDOR_ID_WISEGROUP, USB_DEVICE_ID_SMARTJOY_PLUS) },
  	{ HID_BLUETOOTH_DEVICE(USB_VENDOR_ID_WACOM, USB_DEVICE_ID_WACOM_GRAPHIRE_BLUETOOTH) },
+ 	{ HID_BLUETOOTH_DEVICE(USB_VENDOR_ID_WACOM, USB_DEVICE_ID_WACOM_INTUOS4_BLUETOOTH) },
 +	{ HID_USB_DEVICE(USB_VENDOR_ID_WALTOP, USB_DEVICE_ID_WALTOP_SLIM_TABLET_5_8_INCH) },
 +	{ HID_USB_DEVICE(USB_VENDOR_ID_WALTOP, USB_DEVICE_ID_WALTOP_SLIM_TABLET_12_1_INCH) },
++	{ HID_USB_DEVICE(USB_VENDOR_ID_WALTOP, USB_DEVICE_ID_WALTOP_Q_PAD) },
 +	{ HID_USB_DEVICE(USB_VENDOR_ID_WALTOP, USB_DEVICE_ID_WALTOP_MEDIA_TABLET_10_6_INCH) },
 +	{ HID_USB_DEVICE(USB_VENDOR_ID_WALTOP, USB_DEVICE_ID_WALTOP_MEDIA_TABLET_14_1_INCH) },
  	{ HID_USB_DEVICE(USB_VENDOR_ID_ZEROPLUS, 0x0005) },
  	{ HID_USB_DEVICE(USB_VENDOR_ID_ZEROPLUS, 0x0030) },
  	{ HID_USB_DEVICE(USB_VENDOR_ID_ZYDACRON, USB_DEVICE_ID_ZYDACRON_REMOTE_CONTROL) },
 diff --git a/drivers/hid/hid-ids.h b/drivers/hid/hid-ids.h
-index cbc18c6..341ca05 100644
+index 201cc9d..0ec8cb7 100644
 --- a/drivers/hid/hid-ids.h
 +++ b/drivers/hid/hid-ids.h
-@@ -526,6 +526,12 @@
- #define USB_VENDOR_ID_WACOM		0x056a
+@@ -504,6 +504,13 @@
  #define USB_DEVICE_ID_WACOM_GRAPHIRE_BLUETOOTH	0x81
+ #define USB_DEVICE_ID_WACOM_INTUOS4_BLUETOOTH	0xbd
  
 +#define USB_VENDOR_ID_WALTOP				0x172f
 +#define USB_DEVICE_ID_WALTOP_SLIM_TABLET_5_8_INCH	0x0032
 +#define USB_DEVICE_ID_WALTOP_SLIM_TABLET_12_1_INCH	0x0034
++#define USB_DEVICE_ID_WALTOP_Q_PAD			0x0037
 +#define USB_DEVICE_ID_WALTOP_MEDIA_TABLET_10_6_INCH	0x0501
 +#define USB_DEVICE_ID_WALTOP_MEDIA_TABLET_14_1_INCH	0x0500
 +
@@ -84,10 +87,10 @@ index cbc18c6..341ca05 100644
  #define USB_DEVICE_ID_1_PHIDGETSERVO_20	0x8101
 diff --git a/drivers/hid/hid-waltop.c b/drivers/hid/hid-waltop.c
 new file mode 100644
-index 0000000..6321d95
+index 0000000..7c2f87f
 --- /dev/null
 +++ b/drivers/hid/hid-waltop.c
-@@ -0,0 +1,1098 @@
+@@ -0,0 +1,1290 @@
 +/*
 + *  HID driver for Waltop devices not fully compliant with HID standard
 + *
@@ -503,6 +506,190 @@ index 0000000..6321d95
 +	0x09, 0x31,         /*          Usage (Y),                  */
 +	0x46, 0x6A, 0x18,   /*          Physical Maximum (6250),    */
 +	0x26, 0xD4, 0x30,   /*          Logical Maximum (12500),    */
++	0x81, 0x02,         /*          Input (Variable),           */
++	0xB4,               /*          Pop,                        */
++	0x09, 0x30,         /*          Usage (Tip Pressure),       */
++	0x26, 0xFF, 0x03,   /*          Logical Maximum (1023),     */
++	0x81, 0x02,         /*          Input (Variable),           */
++	0xC0,               /*      End Collection,                 */
++	0xC0                /*  End Collection                      */
++};
++
++/*
++ * Original Q Pad report descriptor.
++ *
++ * The descriptor is similar to the Slim Tablet 5.8 inch descriptor with the
++ * addition of consumer AC Pan field to the report ID 1, which seems to be
++ * unused in the default mode. However, this tablet has resolution of 2048 LPI.
++ *
++ *  Usage Page (Desktop),           ; Generic desktop controls (01h)
++ *  Usage (Mouse),                  ; Mouse (02h, application collection)
++ *  Collection (Application),
++ *    Report ID (1),
++ *    Usage (Pointer),              ; Pointer (01h, physical collection)
++ *    Collection (Physical),
++ *      Usage Page (Button),        ; Button (09h)
++ *      Usage Minimum (01h),
++ *      Usage Maximum (05h),
++ *      Logical Minimum (0),
++ *      Logical Maximum (1),
++ *      Report Size (1),
++ *      Report Count (5),
++ *      Input (Variable),
++ *      Report Size (3),
++ *      Report Count (1),
++ *      Input (Constant, Variable),
++ *      Usage Page (Desktop),       ; Generic desktop controls (01h)
++ *      Usage (X),                  ; X (30h, dynamic value)
++ *      Usage (Y),                  ; Y (31h, dynamic value)
++ *      Usage (Wheel),              ; Wheel (38h, dynamic value)
++ *      Logical Minimum (-127),
++ *      Logical Maximum (127),
++ *      Report Size (8),
++ *      Report Count (3),
++ *      Input (Variable, Relative),
++ *      Usage Page (Consumer),      ; Consumer (0Ch)
++ *      Logical Minimum (-127),
++ *      Logical Maximum (127),
++ *      Report Size (8),
++ *      Report Count (1),
++ *      Usage (AC Pan),             ; AC pan (0238h, linear control)
++ *      Input (Variable, Relative),
++ *    End Collection,
++ *  End Collection,
++ *  Usage Page (Digitizer),         ; Digitizer (0Dh)
++ *  Usage (Pen),                    ; Pen (02h, application collection)
++ *  Collection (Application),
++ *    Report ID (2),
++ *    Usage (Stylus),               ; Stylus (20h, logical collection)
++ *    Collection (Physical),
++ *      Usage (00h),
++ *      Logical Minimum (0),
++ *      Logical Maximum (255),
++ *      Report Size (8),
++ *      Report Count (7),
++ *      Input (Variable),
++ *      Usage (Azimuth),            ; Azimuth (3Fh, dynamic value)
++ *      Usage (Altitude),           ; Altitude (40h, dynamic value)
++ *      Logical Minimum (0),
++ *      Logical Maximum (255),
++ *      Report Size (8),
++ *      Report Count (2),
++ *      Feature (Variable),
++ *    End Collection,
++ *    Report ID (5),
++ *    Usage Page (Digitizer),       ; Digitizer (0Dh)
++ *    Usage (Stylus),               ; Stylus (20h, logical collection)
++ *    Collection (Physical),
++ *      Usage (00h),
++ *      Logical Minimum (0),
++ *      Logical Maximum (255),
++ *      Report Size (8),
++ *      Report Count (7),
++ *      Input (Variable),
++ *    End Collection,
++ *    Report ID (10),
++ *    Usage Page (Digitizer),       ; Digitizer (0Dh)
++ *    Usage (Stylus),               ; Stylus (20h, logical collection)
++ *    Collection (Physical),
++ *      Usage (00h),
++ *      Logical Minimum (0),
++ *      Logical Maximum (255),
++ *      Report Size (8),
++ *      Report Count (7),
++ *      Input (Variable),
++ *    End Collection,
++ *    Report ID (16),
++ *    Usage (Stylus),               ; Stylus (20h, logical collection)
++ *    Collection (Physical),
++ *      Usage (Tip Switch),         ; Tip switch (42h, momentary control)
++ *      Usage (Barrel Switch),      ; Barrel switch (44h, momentary control)
++ *      Usage (Invert),             ; Invert (3Ch, momentary control)
++ *      Usage (Eraser),             ; Eraser (45h, momentary control)
++ *      Usage (In Range),           ; In range (32h, momentary control)
++ *      Logical Minimum (0),
++ *      Logical Maximum (1),
++ *      Report Size (1),
++ *      Report Count (5),
++ *      Input (Variable),
++ *      Report Count (3),
++ *      Input (Constant, Variable),
++ *      Usage Page (Desktop),       ; Generic desktop controls (01h)
++ *      Usage (X),                  ; X (30h, dynamic value)
++ *      Report Size (16),
++ *      Report Count (1),
++ *      Push,
++ *      Unit Exponent (13),
++ *      Unit (Inch^3),
++ *      Logical Minimum (0),
++ *      Logical Maximum (12288),
++ *      Physical Minimum (0),
++ *      Physical Maximum (12288),
++ *      Input (Variable),
++ *      Usage (Y),                  ; Y (31h, dynamic value)
++ *      Logical Minimum (0),
++ *      Logical Maximum (9216),
++ *      Physical Minimum (0),
++ *      Physical Maximum (9216),
++ *      Input (Variable),
++ *      Usage Page (Digitizer),     ; Digitizer (0Dh)
++ *      Usage (Tip Pressure),       ; Tip pressure (30h, dynamic value)
++ *      Logical Minimum (0),
++ *      Logical Maximum (1023),
++ *      Physical Minimum (0),
++ *      Physical Maximum (1023),
++ *      Input (Variable),
++ *    End Collection,
++ *  End Collection
++ */
++
++/* Size of the original report descriptor of Q Pad */
++#define Q_PAD_RDESC_ORIG_SIZE	241
++
++/*
++ * Fixed Q Pad descriptor.
++ *
++ * All the reports except the stylus report (ID 16) were removed as unused.
++ * The stylus buttons description was fixed.
++ */
++static __u8 q_pad_rdesc_fixed[] = {
++	0x05, 0x0D,         /*  Usage Page (Digitizer),             */
++	0x09, 0x02,         /*  Usage (Pen),                        */
++	0xA1, 0x01,         /*  Collection (Application),           */
++	0x85, 0x10,         /*      Report ID (16),                 */
++	0x09, 0x20,         /*      Usage (Stylus),                 */
++	0xA0,               /*      Collection (Physical),          */
++	0x09, 0x42,         /*          Usage (Tip Switch),         */
++	0x09, 0x44,         /*          Usage (Barrel Switch),      */
++	0x09, 0x46,         /*          Usage (Tablet Pick),        */
++	0x15, 0x01,         /*          Logical Minimum (1),        */
++	0x25, 0x03,         /*          Logical Maximum (3),        */
++	0x75, 0x04,         /*          Report Size (4),            */
++	0x95, 0x01,         /*          Report Count (1),           */
++	0x80,               /*          Input,                      */
++	0x09, 0x32,         /*          Usage (In Range),           */
++	0x14,               /*          Logical Minimum (0),        */
++	0x25, 0x01,         /*          Logical Maximum (1),        */
++	0x75, 0x01,         /*          Report Size (1),            */
++	0x95, 0x01,         /*          Report Count (1),           */
++	0x81, 0x02,         /*          Input (Variable),           */
++	0x95, 0x03,         /*          Report Count (3),           */
++	0x81, 0x03,         /*          Input (Constant, Variable), */
++	0x75, 0x10,         /*          Report Size (16),           */
++	0x95, 0x01,         /*          Report Count (1),           */
++	0x14,               /*          Logical Minimum (0),        */
++	0xA4,               /*          Push,                       */
++	0x05, 0x01,         /*          Usage Page (Desktop),       */
++	0x65, 0x13,         /*          Unit (Inch),                */
++	0x55, 0xFD,         /*          Unit Exponent (-3),         */
++	0x34,               /*          Physical Minimum (0),       */
++	0x09, 0x30,         /*          Usage (X),                  */
++	0x46, 0x70, 0x17,   /*          Physical Maximum (6000),    */
++	0x26, 0x00, 0x30,   /*          Logical Maximum (12288),    */
++	0x81, 0x02,         /*          Input (Variable),           */
++	0x09, 0x31,         /*          Usage (Y),                  */
++	0x46, 0x94, 0x11,   /*          Physical Maximum (4500),    */
++	0x26, 0x00, 0x24,   /*          Logical Maximum (9216),     */
 +	0x81, 0x02,         /*          Input (Variable),           */
 +	0xB4,               /*          Pop,                        */
 +	0x09, 0x30,         /*          Usage (Tip Pressure),       */
@@ -1138,6 +1325,12 @@ index 0000000..6321d95
 +			*rsize = sizeof(slim_tablet_12_1_inch_rdesc_fixed);
 +		}
 +		break;
++	case USB_DEVICE_ID_WALTOP_Q_PAD:
++		if (*rsize == Q_PAD_RDESC_ORIG_SIZE) {
++			rdesc = q_pad_rdesc_fixed;
++			*rsize = sizeof(q_pad_rdesc_fixed);
++		}
++		break;
 +	case USB_DEVICE_ID_WALTOP_MEDIA_TABLET_10_6_INCH:
 +		if (*rsize == MEDIA_TABLET_10_6_INCH_RDESC_ORIG_SIZE) {
 +			rdesc = media_tablet_10_6_inch_rdesc_fixed;
@@ -1159,6 +1352,8 @@ index 0000000..6321d95
 +				USB_DEVICE_ID_WALTOP_SLIM_TABLET_5_8_INCH) },
 +	{ HID_USB_DEVICE(USB_VENDOR_ID_WALTOP,
 +				USB_DEVICE_ID_WALTOP_SLIM_TABLET_12_1_INCH) },
++	{ HID_USB_DEVICE(USB_VENDOR_ID_WALTOP,
++				USB_DEVICE_ID_WALTOP_Q_PAD) },
 +	{ HID_USB_DEVICE(USB_VENDOR_ID_WALTOP,
 +				USB_DEVICE_ID_WALTOP_MEDIA_TABLET_10_6_INCH) },
 +	{ HID_USB_DEVICE(USB_VENDOR_ID_WALTOP,
@@ -1187,18 +1382,18 @@ index 0000000..6321d95
 +module_exit(waltop_exit);
 +MODULE_LICENSE("GPL");
 diff --git a/drivers/hid/usbhid/hid-quirks.c b/drivers/hid/usbhid/hid-quirks.c
-index 2663dcb..b2b4b5d 100644
+index e6c5242..e756f7e 100644
 --- a/drivers/hid/usbhid/hid-quirks.c
 +++ b/drivers/hid/usbhid/hid-quirks.c
-@@ -73,6 +73,8 @@ static const struct hid_blacklist {
+@@ -70,6 +70,8 @@ static const struct hid_blacklist {
+ 	{ USB_VENDOR_ID_UCLOGIC, USB_DEVICE_ID_UCLOGIC_TABLET_PF1209, HID_QUIRK_MULTI_INPUT },
  	{ USB_VENDOR_ID_UCLOGIC, USB_DEVICE_ID_UCLOGIC_TABLET_WP5540U, HID_QUIRK_MULTI_INPUT },
  	{ USB_VENDOR_ID_UCLOGIC, USB_DEVICE_ID_UCLOGIC_TABLET_WP8060U, HID_QUIRK_MULTI_INPUT },
- 	{ USB_VENDOR_ID_UCLOGIC, USB_DEVICE_ID_UCLOGIC_TABLET_KNA5, HID_QUIRK_MULTI_INPUT },
 +	{ USB_VENDOR_ID_WALTOP, USB_DEVICE_ID_WALTOP_MEDIA_TABLET_10_6_INCH, HID_QUIRK_MULTI_INPUT },
 +	{ USB_VENDOR_ID_WALTOP, USB_DEVICE_ID_WALTOP_MEDIA_TABLET_14_1_INCH, HID_QUIRK_MULTI_INPUT },
  	{ USB_VENDOR_ID_WISEGROUP, USB_DEVICE_ID_DUAL_USB_JOYPAD, HID_QUIRK_NOGET | HID_QUIRK_MULTI_INPUT | HID_QUIRK_SKIP_OUTPUT_REPORTS },
  	{ USB_VENDOR_ID_WISEGROUP, USB_DEVICE_ID_QUAD_USB_JOYPAD, HID_QUIRK_NOGET | HID_QUIRK_MULTI_INPUT },
  
 -- 
-1.7.2.3
+1.7.2.5
 
