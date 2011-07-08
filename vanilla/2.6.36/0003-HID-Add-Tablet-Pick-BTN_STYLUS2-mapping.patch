@@ -1,4 +1,4 @@
-From 435734dd41450467d6918feeeb84fed798fcbae0 Mon Sep 17 00:00:00 2001
+From 1623fc1fc378481ffe5d8820de21b7798c2ec88b Mon Sep 17 00:00:00 2001
 From: Nikolai Kondrashov <spbnick@gmail.com>
 Date: Fri, 6 Aug 2010 23:03:07 +0400
 Subject: [PATCH 3/6] HID: Add Tablet Pick -> BTN_STYLUS2 mapping
@@ -34,5 +34,5 @@ index 6c03dcc..0c2908f 100644
  		}
  		break;
 -- 
-1.7.2.3
+1.7.5.4
 

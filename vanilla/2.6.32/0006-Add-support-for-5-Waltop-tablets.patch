@@ -1,4 +1,4 @@
-From 772e755cd7b8505f5518ed2e3047f61af4076f2e Mon Sep 17 00:00:00 2001
+From 821a29a3cee72f3f648b2fa82fd807dcd157e395 Mon Sep 17 00:00:00 2001
 From: Nikolai Kondrashov <spbnick@gmail.com>
 Date: Sat, 11 Sep 2010 00:03:18 +0400
 Subject: [PATCH 6/6] Add support for 5 Waltop tablets
@@ -52,11 +52,11 @@ index 6aa499a..c363d4f 100644
  obj-$(CONFIG_USB_HID)		+= usbhid/
  obj-$(CONFIG_USB_MOUSE)		+= usbhid/
 diff --git a/drivers/hid/hid-core.c b/drivers/hid/hid-core.c
-index 5d5c011..f907d2a 100644
+index c681159..d11e17f 100644
 --- a/drivers/hid/hid-core.c
 +++ b/drivers/hid/hid-core.c
-@@ -1347,6 +1347,11 @@ static const struct hid_device_id hid_blacklist[] = {
- 	{ HID_USB_DEVICE(USB_VENDOR_ID_UCLOGIC, USB_DEVICE_ID_UCLOGIC_TABLET_WP8060U) },
+@@ -1348,6 +1348,11 @@ static const struct hid_device_id hid_blacklist[] = {
+ 	{ HID_USB_DEVICE(USB_VENDOR_ID_UCLOGIC, USB_DEVICE_ID_UCLOGIC_TABLET_WP1062) },
  	{ HID_USB_DEVICE(USB_VENDOR_ID_WISEGROUP, USB_DEVICE_ID_SMARTJOY_PLUS) },
  	{ HID_BLUETOOTH_DEVICE(USB_VENDOR_ID_WACOM, USB_DEVICE_ID_WACOM_GRAPHIRE_BLUETOOTH) },
 +	{ HID_USB_DEVICE(USB_VENDOR_ID_WALTOP, USB_DEVICE_ID_WALTOP_SLIM_TABLET_5_8_INCH) },
@@ -68,10 +68,10 @@ index 5d5c011..f907d2a 100644
  	{ HID_USB_DEVICE(USB_VENDOR_ID_ZEROPLUS, 0x0030) },
  
 diff --git a/drivers/hid/hid-ids.h b/drivers/hid/hid-ids.h
-index b59ddf0..76daa41 100644
+index 4bafad0..414780e 100644
 --- a/drivers/hid/hid-ids.h
 +++ b/drivers/hid/hid-ids.h
-@@ -423,6 +423,13 @@
+@@ -424,6 +424,13 @@
  #define USB_VENDOR_ID_WACOM		0x056a
  #define USB_DEVICE_ID_WACOM_GRAPHIRE_BLUETOOTH	0x81
  
@@ -1395,5 +1395,5 @@ index ff2e78b..ca29dcf 100644
  	{ USB_VENDOR_ID_WISEGROUP, USB_DEVICE_ID_QUAD_USB_JOYPAD, HID_QUIRK_NOGET | HID_QUIRK_MULTI_INPUT },
  
 -- 
-1.7.2.5
+1.7.5.4
 

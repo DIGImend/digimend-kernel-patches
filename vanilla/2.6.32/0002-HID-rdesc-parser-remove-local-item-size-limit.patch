@@ -1,4 +1,4 @@
-From bc7168944c6e207aff82181af0af85e9435c40d9 Mon Sep 17 00:00:00 2001
+From 0cfc8e4e41b07465bd312764e8ca5e344036b244 Mon Sep 17 00:00:00 2001
 From: Nikolai Kondrashov <spbnick@gmail.com>
 Date: Fri, 10 Sep 2010 23:51:04 +0400
 Subject: [PATCH 2/6] HID: rdesc parser: remove local item size limit
@@ -40,5 +40,5 @@ index 4933d8e..d18174a 100644
  
  	switch (item->tag) {
 -- 
-1.7.2.3
+1.7.5.4
 

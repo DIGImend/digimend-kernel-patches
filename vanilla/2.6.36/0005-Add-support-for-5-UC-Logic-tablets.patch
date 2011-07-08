@@ -1,20 +1,20 @@
-From ca030954e336ac2b0768297852b7c29c16a47d43 Mon Sep 17 00:00:00 2001
+From 06d4499a714ad6855c325c0e84d074acb3f0f888 Mon Sep 17 00:00:00 2001
 From: Nikolai Kondrashov <spbnick@gmail.com>
 Date: Thu, 21 Oct 2010 18:05:36 +0400
-Subject: [PATCH 5/6] Add support for 4 UC-Logic tablets
+Subject: [PATCH 5/6] Add support for 5 UC-Logic tablets
 
-Add support for four UC-Logic tablets by fixing their report descriptors.
-The tablets supported are: WP4030U, WP5540U, WP8060U, PF1209.
+Add support for five UC-Logic tablets by fixing their report descriptors.
+The tablets supported are: WP4030U, WP5540U, WP8060U, WP1062 and PF1209.
 
 Signed-off-by: Nikolai Kondrashov <spbnick@gmail.com>
 ---
  drivers/hid/Kconfig             |    6 +
  drivers/hid/Makefile            |    1 +
- drivers/hid/hid-core.c          |    4 +
- drivers/hid/hid-ids.h           |    2 +
- drivers/hid/hid-uclogic.c       |  623 +++++++++++++++++++++++++++++++++++++++
+ drivers/hid/hid-core.c          |    5 +
+ drivers/hid/hid-ids.h           |    3 +
+ drivers/hid/hid-uclogic.c       |  818 +++++++++++++++++++++++++++++++++++++++
  drivers/hid/usbhid/hid-quirks.c |    3 +-
- 6 files changed, 638 insertions(+), 1 deletions(-)
+ 6 files changed, 835 insertions(+), 1 deletions(-)
  create mode 100644 drivers/hid/hid-uclogic.c
 
 diff --git a/drivers/hid/Kconfig b/drivers/hid/Kconfig
@@ -47,10 +47,10 @@ index 46f037f..8c4a510 100644
  obj-$(CONFIG_HID_ZYDACRON)	+= hid-zydacron.o
  obj-$(CONFIG_HID_WACOM)		+= hid-wacom.o
 diff --git a/drivers/hid/hid-core.c b/drivers/hid/hid-core.c
-index 1c22ce5..f8a9c0e 100644
+index 1c22ce5..3dbdffa 100644
 --- a/drivers/hid/hid-core.c
 +++ b/drivers/hid/hid-core.c
-@@ -1382,6 +1382,10 @@ static const struct hid_device_id hid_blacklist[] = {
+@@ -1382,6 +1382,11 @@ static const struct hid_device_id hid_blacklist[] = {
  	{ HID_USB_DEVICE(USB_VENDOR_ID_TOPSEED, USB_DEVICE_ID_TOPSEED_CYBERLINK) },
  	{ HID_USB_DEVICE(USB_VENDOR_ID_TOPSEED2, USB_DEVICE_ID_TOPSEED2_RF_COMBO) },
  	{ HID_USB_DEVICE(USB_VENDOR_ID_TWINHAN, USB_DEVICE_ID_TWINHAN_IR_REMOTE) },
@@ -58,28 +58,30 @@ index 1c22ce5..f8a9c0e 100644
 +	{ HID_USB_DEVICE(USB_VENDOR_ID_UCLOGIC, USB_DEVICE_ID_UCLOGIC_TABLET_WP4030U) },
 +	{ HID_USB_DEVICE(USB_VENDOR_ID_UCLOGIC, USB_DEVICE_ID_UCLOGIC_TABLET_WP5540U) },
 +	{ HID_USB_DEVICE(USB_VENDOR_ID_UCLOGIC, USB_DEVICE_ID_UCLOGIC_TABLET_WP8060U) },
++	{ HID_USB_DEVICE(USB_VENDOR_ID_UCLOGIC, USB_DEVICE_ID_UCLOGIC_TABLET_WP1062) },
  	{ HID_USB_DEVICE(USB_VENDOR_ID_WISEGROUP, USB_DEVICE_ID_SMARTJOY_PLUS) },
  	{ HID_BLUETOOTH_DEVICE(USB_VENDOR_ID_WACOM, USB_DEVICE_ID_WACOM_GRAPHIRE_BLUETOOTH) },
  	{ HID_USB_DEVICE(USB_VENDOR_ID_ZEROPLUS, 0x0005) },
 diff --git a/drivers/hid/hid-ids.h b/drivers/hid/hid-ids.h
-index c5ae5f1..cbc18c6 100644
+index c5ae5f1..259acb4 100644
 --- a/drivers/hid/hid-ids.h
 +++ b/drivers/hid/hid-ids.h
-@@ -512,6 +512,8 @@
+@@ -512,6 +512,9 @@
  #define USB_VENDOR_ID_UCLOGIC		0x5543
  #define USB_DEVICE_ID_UCLOGIC_TABLET_PF1209	0x0042
  #define USB_DEVICE_ID_UCLOGIC_TABLET_WP4030U	0x0003
 +#define USB_DEVICE_ID_UCLOGIC_TABLET_WP5540U	0x0004
 +#define USB_DEVICE_ID_UCLOGIC_TABLET_WP8060U	0x0005
++#define USB_DEVICE_ID_UCLOGIC_TABLET_WP1062	0x0064
  #define USB_DEVICE_ID_UCLOGIC_TABLET_KNA5	0x6001
  
  #define USB_VENDOR_ID_VERNIER		0x08f7
 diff --git a/drivers/hid/hid-uclogic.c b/drivers/hid/hid-uclogic.c
 new file mode 100644
-index 0000000..05fdc85a
+index 0000000..e15732f
 --- /dev/null
 +++ b/drivers/hid/hid-uclogic.c
-@@ -0,0 +1,623 @@
+@@ -0,0 +1,818 @@
 +/*
 + *  HID driver for UC-Logic devices not fully compliant with HID standard
 + *
@@ -425,6 +427,193 @@ index 0000000..05fdc85a
 +};
 +
 +/*
++ * Original WP1062 report descriptor.
++ *
++ * Only report ID 9 is actually used.
++ *
++ *  Usage Page (Digitizer),         ; Digitizer (0Dh)
++ *  Usage (Pen),                    ; Pen (02h, application collection)
++ *  Collection (Application),
++ *    Report ID (7),
++ *    Usage (Stylus),               ; Stylus (20h, logical collection)
++ *    Collection (Physical),
++ *      Usage (Tip Switch),         ; Tip switch (42h, momentary control)
++ *      Usage (Barrel Switch),      ; Barrel switch (44h, momentary control)
++ *      Usage (Eraser),             ; Eraser (45h, momentary control)
++ *      Logical Minimum (0),
++ *      Logical Maximum (1),
++ *      Report Size (1),
++ *      Report Count (3),
++ *      Input (Variable),
++ *      Report Count (3),
++ *      Input (Constant, Variable),
++ *      Usage (In Range),           ; In range (32h, momentary control)
++ *      Report Count (1),
++ *      Input (Variable),
++ *      Report Count (1),
++ *      Input (Constant, Variable),
++ *      Usage Page (Desktop),       ; Generic desktop controls (01h)
++ *      Usage (X),                  ; X (30h, dynamic value)
++ *      Report Size (16),
++ *      Report Count (1),
++ *      Push,
++ *      Unit Exponent (13),
++ *      Unit (Inch),
++ *      Physical Minimum (0),
++ *      Physical Maximum (10000),
++ *      Logical Maximum (20000),
++ *      Input (Variable),
++ *      Usage (Y),                  ; Y (31h, dynamic value)
++ *      Physical Maximum (6583),
++ *      Logical Maximum (13166),
++ *      Input (Variable),
++ *      Pop,
++ *      Usage Page (Digitizer),     ; Digitizer (0Dh)
++ *      Usage (Tip Pressure),       ; Tip pressure (30h, dynamic value)
++ *      Logical Maximum (1023),
++ *      Input (Variable),
++ *      Report Size (16),
++ *    End Collection,
++ *  End Collection,
++ *  Usage Page (Desktop),           ; Generic desktop controls (01h)
++ *  Usage (Mouse),                  ; Mouse (02h, application collection)
++ *  Collection (Application),
++ *    Report ID (8),
++ *    Usage (Pointer),              ; Pointer (01h, physical collection)
++ *    Collection (Physical),
++ *      Usage Page (Button),        ; Button (09h)
++ *      Usage Minimum (01h),
++ *      Usage Maximum (03h),
++ *      Logical Minimum (0),
++ *      Logical Maximum (1),
++ *      Report Count (3),
++ *      Report Size (1),
++ *      Input (Variable),
++ *      Report Count (5),
++ *      Input (Constant),
++ *      Usage Page (Desktop),       ; Generic desktop controls (01h)
++ *      Usage (X),                  ; X (30h, dynamic value)
++ *      Usage (Y),                  ; Y (31h, dynamic value)
++ *      Usage (Wheel),              ; Wheel (38h, dynamic value)
++ *      Usage (00h),
++ *      Logical Minimum (-127),
++ *      Logical Maximum (127),
++ *      Report Size (8),
++ *      Report Count (4),
++ *      Input (Variable, Relative),
++ *    End Collection,
++ *  End Collection,
++ *  Usage Page (Desktop),           ; Generic desktop controls (01h)
++ *  Usage (Mouse),                  ; Mouse (02h, application collection)
++ *  Collection (Application),
++ *    Report ID (9),
++ *    Usage (Pointer),              ; Pointer (01h, physical collection)
++ *    Collection (Physical),
++ *      Usage Page (Button),        ; Button (09h)
++ *      Usage Minimum (01h),
++ *      Usage Maximum (03h),
++ *      Logical Minimum (0),
++ *      Logical Maximum (1),
++ *      Report Count (3),
++ *      Report Size (1),
++ *      Input (Variable),
++ *      Report Count (4),
++ *      Input (Constant),
++ *      Usage Page (Digitizer),     ; Digitizer (0Dh)
++ *      Usage (In Range),           ; In range (32h, momentary control)
++ *      Report Count (1),
++ *      Input (Variable),
++ *      Usage Page (Desktop),       ; Generic desktop controls (01h)
++ *      Usage (X),                  ; X (30h, dynamic value)
++ *      Report Size (16),
++ *      Report Count (1),
++ *      Push,
++ *      Unit Exponent (13),
++ *      Unit (Inch),
++ *      Physical Minimum (0),
++ *      Physical Maximum (10000),
++ *      Logical Maximum (20000),
++ *      Input (Variable),
++ *      Usage (Y),                  ; Y (31h, dynamic value)
++ *      Physical Maximum (6583),
++ *      Logical Maximum (13166),
++ *      Input (Variable),
++ *      Pop,
++ *      Usage Page (Digitizer),     ; Digitizer (0Dh)
++ *      Usage (Tip Pressure),       ; Tip pressure (30h, dynamic value)
++ *      Logical Maximum (1023),
++ *      Report Count (1),
++ *      Report Size (16),
++ *      Input (Variable),
++ *    End Collection,
++ *  End Collection,
++ *  Usage Page (Desktop),           ; Generic desktop controls (01h)
++ *  Usage (00h),
++ *  Collection (Application),
++ *    Report ID (4),
++ *    Logical Minimum (0),
++ *    Logical Maximum (255),
++ *    Usage (00h),
++ *    Report Size (8),
++ *    Report Count (3),
++ *    Feature (Variable),
++ *  End Collection
++ */
++
++/* Size of the original descriptor of WP1062 tablet */
++#define WP1062_RDESC_ORIG_SIZE	254
++
++/*
++ * Fixed WP1062 report descriptor.
++ *
++ * Removed unused reports, corrected second barrel button usage code, physical
++ * units.
++ */
++static __u8 wp1062_rdesc_fixed[] = {
++	0x05, 0x0D,         /*  Usage Page (Digitizer),             */
++	0x09, 0x02,         /*  Usage (Pen),                        */
++	0xA1, 0x01,         /*  Collection (Application),           */
++	0x85, 0x09,         /*      Report ID (9),                  */
++	0x09, 0x20,         /*      Usage (Stylus),                 */
++	0xA0,               /*      Collection (Physical),          */
++	0x75, 0x01,         /*          Report Size (1),            */
++	0x09, 0x42,         /*          Usage (Tip Switch),         */
++	0x09, 0x44,         /*          Usage (Barrel Switch),      */
++	0x09, 0x46,         /*          Usage (Tablet Pick),        */
++	0x14,               /*          Logical Minimum (0),        */
++	0x25, 0x01,         /*          Logical Maximum (1),        */
++	0x95, 0x03,         /*          Report Count (3),           */
++	0x81, 0x02,         /*          Input (Variable),           */
++	0x95, 0x04,         /*          Report Count (4),           */
++	0x81, 0x01,         /*          Input (Constant),           */
++	0x09, 0x32,         /*          Usage (In Range),           */
++	0x95, 0x01,         /*          Report Count (1),           */
++	0x81, 0x02,         /*          Input (Variable),           */
++	0x75, 0x10,         /*          Report Size (16),           */
++	0x95, 0x01,         /*          Report Count (1),           */
++	0x14,               /*          Logical Minimum (0),        */
++	0xA4,               /*          Push,                       */
++	0x05, 0x01,         /*          Usage Page (Desktop),       */
++	0x55, 0xFD,         /*          Unit Exponent (-3),         */
++	0x65, 0x13,         /*          Unit (Inch),                */
++	0x34,               /*          Physical Minimum (0),       */
++	0x09, 0x30,         /*          Usage (X),                  */
++	0x46, 0x10, 0x27,   /*          Physical Maximum (10000),   */
++	0x26, 0x20, 0x4E,   /*          Logical Maximum (20000),    */
++	0x81, 0x02,         /*          Input (Variable),           */
++	0x09, 0x31,         /*          Usage (Y),                  */
++	0x46, 0xB7, 0x19,   /*          Physical Maximum (6583),    */
++	0x26, 0x6E, 0x33,   /*          Logical Maximum (13166),    */
++	0x81, 0x02,         /*          Input (Variable),           */
++	0xB4,               /*          Pop,                        */
++	0x09, 0x30,         /*          Usage (Tip Pressure),       */
++	0x26, 0xFF, 0x03,   /*          Logical Maximum (1023),     */
++	0x81, 0x02,         /*          Input (Variable),           */
++	0xC0,               /*      End Collection,                 */
++	0xC0                /*  End Collection                      */
++};
++
++/*
 + * Original PF1209 report descriptor.
 + *
 + * The descriptor is similar to WPXXXXU descriptors, with an addition of a
@@ -666,6 +855,12 @@ index 0000000..05fdc85a
 +			*rsize = sizeof(wp8060u_rdesc_fixed);
 +		}
 +		break;
++	case USB_DEVICE_ID_UCLOGIC_TABLET_WP1062:
++		if (*rsize == WP1062_RDESC_ORIG_SIZE) {
++			rdesc = wp1062_rdesc_fixed;
++			*rsize = sizeof(wp1062_rdesc_fixed);
++		}
++		break;
 +	}
 +
 +	return rdesc;
@@ -680,6 +875,8 @@ index 0000000..05fdc85a
 +				USB_DEVICE_ID_UCLOGIC_TABLET_WP5540U) },
 +	{ HID_USB_DEVICE(USB_VENDOR_ID_UCLOGIC,
 +				USB_DEVICE_ID_UCLOGIC_TABLET_WP8060U) },
++	{ HID_USB_DEVICE(USB_VENDOR_ID_UCLOGIC,
++				USB_DEVICE_ID_UCLOGIC_TABLET_WP1062) },
 +	{ }
 +};
 +MODULE_DEVICE_TABLE(hid, uclogic_devices);
@@ -718,5 +915,5 @@ index f0260c6..2663dcb 100644
  	{ USB_VENDOR_ID_WISEGROUP, USB_DEVICE_ID_DUAL_USB_JOYPAD, HID_QUIRK_NOGET | HID_QUIRK_MULTI_INPUT | HID_QUIRK_SKIP_OUTPUT_REPORTS },
  	{ USB_VENDOR_ID_WISEGROUP, USB_DEVICE_ID_QUAD_USB_JOYPAD, HID_QUIRK_NOGET | HID_QUIRK_MULTI_INPUT },
 -- 
-1.7.2.3
+1.7.5.4
 

@@ -1,6 +1,6 @@
-From f6d5adf67ab72325baad1d16fac0fc4b31af357a Mon Sep 17 00:00:00 2001
+From fd0d06376f06081f3212d3d7549b16be51b42661 Mon Sep 17 00:00:00 2001
 From: Nikolai Kondrashov <spbnick@gmail.com>
-Date: Fri, 10 Sep 2010 21:29:01 +0400
+Date: Fri, 10 Sep 2010 20:54:05 +0400
 Subject: [PATCH 6/6] Add support for 5 Waltop tablets
 
 Add support for 5 Waltop tablets by fixing their report descriptors.
@@ -23,10 +23,10 @@ Signed-off-by: Nikolai Kondrashov <spbnick@gmail.com>
  create mode 100644 drivers/hid/hid-waltop.c
 
 diff --git a/drivers/hid/Kconfig b/drivers/hid/Kconfig
-index 507d016..d167eca 100644
+index 34402bb..4cae11e 100644
 --- a/drivers/hid/Kconfig
 +++ b/drivers/hid/Kconfig
-@@ -168,6 +168,12 @@ config HID_UCLOGIC
+@@ -182,6 +182,12 @@ config HID_UCLOGIC
  	---help---
  	Support for UC-Logic tablets.
  
@@ -40,10 +40,10 @@ index 507d016..d167eca 100644
  	tristate "Gyration"
  	depends on USB_HID
 diff --git a/drivers/hid/Makefile b/drivers/hid/Makefile
-index 4dfbec3..39b0546 100644
+index 8c4a510..c46c7a1 100644
 --- a/drivers/hid/Makefile
 +++ b/drivers/hid/Makefile
-@@ -63,6 +63,7 @@ obj-$(CONFIG_HID_UCLOGIC)	+= hid-uclogic.o
+@@ -65,6 +65,7 @@ obj-$(CONFIG_HID_UCLOGIC)	+= hid-uclogic.o
  obj-$(CONFIG_HID_ZEROPLUS)	+= hid-zpff.o
  obj-$(CONFIG_HID_ZYDACRON)	+= hid-zydacron.o
  obj-$(CONFIG_HID_WACOM)		+= hid-wacom.o
@@ -52,13 +52,13 @@ index 4dfbec3..39b0546 100644
  obj-$(CONFIG_USB_HID)		+= usbhid/
  obj-$(CONFIG_USB_MOUSE)		+= usbhid/
 diff --git a/drivers/hid/hid-core.c b/drivers/hid/hid-core.c
-index 5721bae..898780f 100644
+index 3dbdffa..d803f03 100644
 --- a/drivers/hid/hid-core.c
 +++ b/drivers/hid/hid-core.c
-@@ -1377,6 +1377,11 @@ static const struct hid_device_id hid_blacklist[] = {
+@@ -1389,6 +1389,11 @@ static const struct hid_device_id hid_blacklist[] = {
+ 	{ HID_USB_DEVICE(USB_VENDOR_ID_UCLOGIC, USB_DEVICE_ID_UCLOGIC_TABLET_WP1062) },
  	{ HID_USB_DEVICE(USB_VENDOR_ID_WISEGROUP, USB_DEVICE_ID_SMARTJOY_PLUS) },
  	{ HID_BLUETOOTH_DEVICE(USB_VENDOR_ID_WACOM, USB_DEVICE_ID_WACOM_GRAPHIRE_BLUETOOTH) },
- 	{ HID_BLUETOOTH_DEVICE(USB_VENDOR_ID_WACOM, USB_DEVICE_ID_WACOM_INTUOS4_BLUETOOTH) },
 +	{ HID_USB_DEVICE(USB_VENDOR_ID_WALTOP, USB_DEVICE_ID_WALTOP_SLIM_TABLET_5_8_INCH) },
 +	{ HID_USB_DEVICE(USB_VENDOR_ID_WALTOP, USB_DEVICE_ID_WALTOP_SLIM_TABLET_12_1_INCH) },
 +	{ HID_USB_DEVICE(USB_VENDOR_ID_WALTOP, USB_DEVICE_ID_WALTOP_Q_PAD) },
@@ -68,12 +68,12 @@ index 5721bae..898780f 100644
  	{ HID_USB_DEVICE(USB_VENDOR_ID_ZEROPLUS, 0x0030) },
  	{ HID_USB_DEVICE(USB_VENDOR_ID_ZYDACRON, USB_DEVICE_ID_ZYDACRON_REMOTE_CONTROL) },
 diff --git a/drivers/hid/hid-ids.h b/drivers/hid/hid-ids.h
-index 201cc9d..0ec8cb7 100644
+index 259acb4..f9f6e4d 100644
 --- a/drivers/hid/hid-ids.h
 +++ b/drivers/hid/hid-ids.h
-@@ -504,6 +504,13 @@
+@@ -527,6 +527,13 @@
+ #define USB_VENDOR_ID_WACOM		0x056a
  #define USB_DEVICE_ID_WACOM_GRAPHIRE_BLUETOOTH	0x81
- #define USB_DEVICE_ID_WACOM_INTUOS4_BLUETOOTH	0xbd
  
 +#define USB_VENDOR_ID_WALTOP				0x172f
 +#define USB_DEVICE_ID_WALTOP_SLIM_TABLET_5_8_INCH	0x0032
@@ -1382,18 +1382,18 @@ index 0000000..7c2f87f
 +module_exit(waltop_exit);
 +MODULE_LICENSE("GPL");
 diff --git a/drivers/hid/usbhid/hid-quirks.c b/drivers/hid/usbhid/hid-quirks.c
-index e6c5242..e756f7e 100644
+index 2663dcb..b2b4b5d 100644
 --- a/drivers/hid/usbhid/hid-quirks.c
 +++ b/drivers/hid/usbhid/hid-quirks.c
-@@ -70,6 +70,8 @@ static const struct hid_blacklist {
- 	{ USB_VENDOR_ID_UCLOGIC, USB_DEVICE_ID_UCLOGIC_TABLET_PF1209, HID_QUIRK_MULTI_INPUT },
+@@ -73,6 +73,8 @@ static const struct hid_blacklist {
  	{ USB_VENDOR_ID_UCLOGIC, USB_DEVICE_ID_UCLOGIC_TABLET_WP5540U, HID_QUIRK_MULTI_INPUT },
  	{ USB_VENDOR_ID_UCLOGIC, USB_DEVICE_ID_UCLOGIC_TABLET_WP8060U, HID_QUIRK_MULTI_INPUT },
+ 	{ USB_VENDOR_ID_UCLOGIC, USB_DEVICE_ID_UCLOGIC_TABLET_KNA5, HID_QUIRK_MULTI_INPUT },
 +	{ USB_VENDOR_ID_WALTOP, USB_DEVICE_ID_WALTOP_MEDIA_TABLET_10_6_INCH, HID_QUIRK_MULTI_INPUT },
 +	{ USB_VENDOR_ID_WALTOP, USB_DEVICE_ID_WALTOP_MEDIA_TABLET_14_1_INCH, HID_QUIRK_MULTI_INPUT },
  	{ USB_VENDOR_ID_WISEGROUP, USB_DEVICE_ID_DUAL_USB_JOYPAD, HID_QUIRK_NOGET | HID_QUIRK_MULTI_INPUT | HID_QUIRK_SKIP_OUTPUT_REPORTS },
  	{ USB_VENDOR_ID_WISEGROUP, USB_DEVICE_ID_QUAD_USB_JOYPAD, HID_QUIRK_NOGET | HID_QUIRK_MULTI_INPUT },
  
 -- 
-1.7.2.5
+1.7.5.4
 
