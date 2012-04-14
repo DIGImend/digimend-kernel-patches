@@ -1,86 +1,21 @@
-LEGEND
+The table below shows tablet support added by patches for
+corresponding kernels (P) as well as tablet support already
+present in the upstream kernels (u), i.e. not requiring a patch.
 
-OK          The kernel/tablet combination was tested to be working with this release.
-UNTESTED    The kernel/tablet combination wasn't tested with this release, but will likely work.
-UNSUPPORTED The kernel/tablet combination isn't supported in this release.
+VID:PID     Original model              stable      vanilla vanilla vanilla
+                                        2.6.39.2    2.6.36  2.6.35  2.6.32
 
-UPSTREAM    The support is included in the upstream kernel version - no patching needed.
+5543:0003   UC-Logic Tablet WP4030U     u           P       P       P
+5543:0004   UC-Logic Tablet WP5540U     u           P       P       P
+5543:0005   UC-Logic Tablet WP8060U     u           P       P       P
+5543:0042   UC-Logic Tablet PF1209      u           P       P       P
+172f:0032   Waltop Slim Tablet 5.8"     u           P       P       P
+172f:0034   Waltop Slim Tablet 12.1"    u           P       P       P
+172f:0501   Waltop Media Tablet 10.6"   u           P       P       P
+172f:0500   Waltop Media Tablet 14.1"   u           P       P       P
+5543:0064   UC-Logic Tablet WP1062      P           P       P       P
+172f:0037   Waltop Q Pad                P           P       P       P
 
--------------------------------------------------------------------------------------------------
-        Please report results of your testing to Nikolai Kondrashov <spbnick@gmail.com>
--------------------------------------------------------------------------------------------------
-
-VID:PID     Original model              Rebranded models*               2.6.39.2        2.6.36          2.6.35          2.6.32
-
-5543:0003   UC-Logic Tablet WP4030U     Trust item #16486               UNTESTED,       UNTESTED        UNTESTED        UNTESTED
-                                        Genius MousePen 4x3             UPSTREAM
-                                        Aquila L1
-                                        Manhattan 3"x4"**
-                                        Monoprice 4X3**
-                                        Iball Pen Tablet 4030U**
-
-5543:0004   UC-Logic Tablet WP5540U     Trust item #15356               UNTESTED,       UNTESTED        UNTESTED        UNTESTED
-                                        Genius MousePen 5x4             UPSTREAM
-                                        Genius EasyPen i405
-                                        Adesso CyberTablet Z7**
-                                        DigiPro WP5540**
-                                        Iball Pen Tablet 5540U**
-
-5543:0005   UC-Logic Tablet WP8060U     Genius MousePen 8x6             OK,             OK              OK              OK
-                                        Genius MousePen i608            UPSTREAM
-                                        Trust item #16447
-                                        DigiPro WP8060**
-                                        Manhattan 8"x6"**
-                                        Iball Pen Tablet 8060U**
-                                        NGS Draw Master
-
-5543:0064   UC-Logic Tablet WP1062      Aiptek HyperPen 10000U          UNTESTED        UNTESTED        UNTESTED        UNTESTED
-                                        Monoprice 10X6.25 Inches
-                                         Graphic Drawing Tablet
-                                        Pickle 10x6.25 Inch
-                                         Graphic Drawing tablet**
-
-5543:0042   UC-Logic Tablet PF1209      Genius PenSketch 12x9           UNTESTED,       UNTESTED        UNTESTED        UNTESTED
-                                        Adesso CyberTablet 12000**      UPSTREAM
-                                        Adesso CT-12000A**
-                                        Iball Design Tablet PF1209**
-
-172f:0032   Waltop Slim Tablet 5.8"     Genius G-Pen F350               UNTESTED,       UNTESTED        UNTESTED        UNTESTED
-                                        Trust item #16485               UPSTREAM
-                                        VisTablet Mini**
-                                        iVistaTablet Slim 5.8**
-
-172f:0034   Waltop Slim Tablet 12.1"    Genius G-Pen F610               UNTESTED,       UNTESTED        UNTESTED        UNTESTED
-                                        Trust item #16529               UPSTREAM
-                                        VisTablet Original 12"**
-                                        Adesso CyberTablet Z12**
-                                        Adesso CT-Z12A**
-                                        PenPower Tooya Pro**
-                                        Aiptek Slim 12.1 Inch**
-                                        NGS Slim Pro**
-                                        iVistaTablet Slim 12.1**
-
-172f:0037   Waltop Q Pad                Aiptek HyperPen Mini            UNTESTED        UNTESTED        UNTESTED        UNTESTED
-                                        NGS Flexi Style**
-                                        VisTablet PenPad**
-                                        iVistaTablet Q Flex Pad**
-                                        Bravod Q-PD65-S**
-
-172f:0501   Waltop Media Tablet 10.6"   Genius G-Pen M609               limited wheel   limited wheel   limited wheel   limited wheel
-                                        Genius G-Pen M609X              functions,      functions,      functions,      functions,
-                                        iVista Media Tablet 10.6**      UNTESTED,       UNTESTED        UNTESTED        UNTESTED
-                                                                        UPSTREAM
-
-172f:0500   Waltop Media Tablet 14.1"   Genius G-Pen M712               limited wheel   limited wheel   limited wheel   limited wheel
-                                        Genius G-Pen M712X              functions,      functions,      functions,      functions,
-                                        Trust item #15358**             crippled        crippled        crippled        crippled
-                                        Adesso CyberTablet M14**        resolution,     resolution,     resolution,     resolution,
-                                        iVista Media Tablet 14.1**      UNTESTED,       UNTESTED        UNTESTED        UNTESTED
-                                                                        UPSTREAM
-
-*   This is not an exhaustive list, there are very likely more rebranded
-    tablets which are actually supported.
-
-**  These models were discovered by matching advertised appearances and
-    characteristics and weren't verified, but would work with high
-    probability.
+For detailed support information and rebranded model names see
+tablet support status page at
+http://sf.net/apps/mediawiki/digimend/?title=Tablet_support_status
