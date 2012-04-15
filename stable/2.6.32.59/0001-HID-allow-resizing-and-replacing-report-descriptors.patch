@@ -1,4 +1,4 @@
-From 621893e86c697d496d7a6fe9444ac817366eeb7c Mon Sep 17 00:00:00 2001
+From 84b97acd65c283542c30e73ea8d57fdc1f804369 Mon Sep 17 00:00:00 2001
 From: Nikolai Kondrashov <spbnick@gmail.com>
 Date: Fri, 10 Sep 2010 23:48:10 +0400
 Subject: [PATCH 1/8] HID: allow resizing and replacing report descriptors
@@ -361,5 +361,5 @@ index 8709365..b8ec4f9 100644
  	int (*input_mapping)(struct hid_device *hdev,
  			struct hid_input *hidinput, struct hid_field *field,
 -- 
-1.7.9.1
+1.7.2.5
 

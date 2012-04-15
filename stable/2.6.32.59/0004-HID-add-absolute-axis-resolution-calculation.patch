@@ -1,4 +1,4 @@
-From 9aa0b979727d833035e2211cee5c7a020ff71263 Mon Sep 17 00:00:00 2001
+From 5c91d5b3cc24ad49634f82fb76e8f0bad9e50020 Mon Sep 17 00:00:00 2001
 From: Nikolai Kondrashov <spbnick@gmail.com>
 Date: Tue, 14 Dec 2010 14:03:12 +0300
 Subject: [PATCH 4/8] HID: add absolute axis resolution calculation
@@ -113,5 +113,5 @@ index 01052d5..7ab2223 100644
  
  	if (usage->type == EV_ABS &&
 -- 
-1.7.9.1
+1.7.2.5
 

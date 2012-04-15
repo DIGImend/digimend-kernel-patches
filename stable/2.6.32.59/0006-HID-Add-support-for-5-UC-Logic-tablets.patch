@@ -1,4 +1,4 @@
-From 9dd9d2a2b79f7f15fc9147ecbd1e6ece7d02a853 Mon Sep 17 00:00:00 2001
+From f6590bedc1eb841cb3a57ca791c184c8f8cdce4d Mon Sep 17 00:00:00 2001
 From: Nikolai Kondrashov <spbnick@gmail.com>
 Date: Fri, 10 Sep 2010 23:57:38 +0400
 Subject: [PATCH 6/8] HID: Add support for 5 UC-Logic tablets
@@ -524,5 +524,5 @@ index 08a02ab..8161b22 100644
  	{ USB_VENDOR_ID_WISEGROUP, USB_DEVICE_ID_QUAD_USB_JOYPAD, HID_QUIRK_NOGET | HID_QUIRK_MULTI_INPUT },
  
 -- 
-1.7.9.1
+1.7.2.5
 

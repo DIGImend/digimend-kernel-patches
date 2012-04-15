@@ -1,4 +1,4 @@
-From b8a67e7f9f1a09cdfe2cb77ea3be8a1071cd0fde Mon Sep 17 00:00:00 2001
+From 91f45aa5684e35fee27a7adcaa6611f526bcabbe Mon Sep 17 00:00:00 2001
 From: Nikolai Kondrashov <spbnick@gmail.com>
 Date: Sat, 11 Sep 2010 00:03:18 +0400
 Subject: [PATCH 7/8] HID: Add support for 7 Waltop tablets
@@ -92,7 +92,7 @@ index 9291932..a01848e 100644
  #define USB_DEVICE_ID_1_PHIDGETSERVO_20	0x8101
 diff --git a/drivers/hid/hid-waltop.c b/drivers/hid/hid-waltop.c
 new file mode 100644
-index 0000000..9a48438
+index 0000000..578b064
 --- /dev/null
 +++ b/drivers/hid/hid-waltop.c
 @@ -0,0 +1,855 @@
@@ -749,7 +749,7 @@ index 0000000..9a48438
 +
 +	s = kzalloc(sizeof(*s), GFP_KERNEL);
 +	if (s == NULL) {
-+		hid_err(hdev, "can't allocate device state\n");
++		dev_err(&hdev->dev, "can't allocate device state\n");
 +		ret = -ENOMEM;
 +		goto err;
 +	}
@@ -761,13 +761,13 @@ index 0000000..9a48438
 +
 +	ret = hid_parse(hdev);
 +	if (ret) {
-+		hid_err(hdev, "parse failed\n");
++		dev_err(&hdev->dev, "parse failed\n");
 +		goto err;
 +	}
 +
 +	ret = hid_hw_start(hdev, HID_CONNECT_DEFAULT);
 +	if (ret) {
-+		hid_err(hdev, "hw start failed\n");
++		dev_err(&hdev->dev, "hw start failed\n");
 +		goto err;
 +	}
 +
@@ -966,5 +966,5 @@ index 8161b22..a2594e5 100644
  	{ USB_VENDOR_ID_WISEGROUP, USB_DEVICE_ID_QUAD_USB_JOYPAD, HID_QUIRK_NOGET | HID_QUIRK_MULTI_INPUT },
  
 -- 
-1.7.9.1
+1.7.2.5
 

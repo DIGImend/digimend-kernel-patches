@@ -1,4 +1,4 @@
-From 0160deb9f837a27cbd9b6a3d0caf983a58565a51 Mon Sep 17 00:00:00 2001
+From 7af1699f884636dcf4e77f7e463d1d1551d24d74 Mon Sep 17 00:00:00 2001
 From: Nikolai Kondrashov <spbnick@gmail.com>
 Date: Tue, 28 Feb 2012 13:01:46 +0200
 Subject: [PATCH 8/8] HID: kye: Add support for 3 tablets
@@ -11,9 +11,9 @@ Signed-off-by: Nikolai Kondrashov <spbnick@gmail.com>
  drivers/hid/Kconfig             |    9 +-
  drivers/hid/hid-core.c          |    3 +
  drivers/hid/hid-ids.h           |   11 +-
- drivers/hid/hid-kye.c           |  399 +++++++++++++++++++++++++++++++++++++--
+ drivers/hid/hid-kye.c           |  401 +++++++++++++++++++++++++++++++++++++--
  drivers/hid/usbhid/hid-quirks.c |    2 +
- 5 files changed, 400 insertions(+), 24 deletions(-)
+ 5 files changed, 402 insertions(+), 24 deletions(-)
 
 diff --git a/drivers/hid/Kconfig b/drivers/hid/Kconfig
 index 3fb7f6d..80acaea 100644
@@ -80,7 +80,7 @@ index a01848e..8f387c4 100644
  
  #endif
 diff --git a/drivers/hid/hid-kye.c b/drivers/hid/hid-kye.c
-index 817247e..b4f0d82 100644
+index 817247e..af03bd3 100644
 --- a/drivers/hid/hid-kye.c
 +++ b/drivers/hid/hid-kye.c
 @@ -3,6 +3,7 @@
@@ -91,7 +91,7 @@ index 817247e..b4f0d82 100644
   */
  
  /*
-@@ -15,36 +16,399 @@
+@@ -15,36 +16,401 @@
  #include <linux/device.h>
  #include <linux/hid.h>
  #include <linux/module.h>
@@ -384,7 +384,7 @@ index 817247e..b4f0d82 100644
 +			rdesc[65] == 0x29 && rdesc[66] == 0x0f &&
 +			rdesc[71] == 0x75 && rdesc[72] == 0x08 &&
 +			rdesc[73] == 0x95 && rdesc[74] == 0x01) {
-+			hid_info(hdev,
++			dev_info(&hdev->dev,
 +				 "fixing up Kye/Genius Ergo Mouse "
 +				 "report descriptor\n");
 +			rdesc[62] = 0x09;
@@ -439,12 +439,14 @@ index 817247e..b4f0d82 100644
 +	}
 +
 +	if (head == list) {
-+		hid_err(hdev, "tablet-enabling feature report not found\n");
++		dev_err(&hdev->dev,
++			"tablet-enabling feature report not found\n");
 +		return -ENODEV;
 +	}
 +
 +	if (report->maxfield < 1 || report->field[0]->report_count < 7) {
-+		hid_err(hdev, "invalid tablet-enabling feature report\n");
++		dev_err(&hdev->dev,
++			"invalid tablet-enabling feature report\n");
 +		return -ENODEV;
 +	}
 +
@@ -468,13 +470,13 @@ index 817247e..b4f0d82 100644
 +
 +	ret = hid_parse(hdev);
 +	if (ret) {
-+		hid_err(hdev, "parse failed\n");
++		dev_err(&hdev->dev, "parse failed\n");
 +		goto err;
 +	}
 +
 +	ret = hid_hw_start(hdev, HID_CONNECT_DEFAULT);
 +	if (ret) {
-+		hid_err(hdev, "hw start failed\n");
++		dev_err(&hdev->dev, "hw start failed\n");
 +		goto err;
 +	}
 +
@@ -484,7 +486,7 @@ index 817247e..b4f0d82 100644
 +	case USB_DEVICE_ID_KYE_EASYPEN_M610X:
 +		ret = kye_tablet_enable(hdev);
 +		if (ret) {
-+			hid_err(hdev, "tablet enabling failed\n");
++			dev_err(&hdev->dev, "tablet enabling failed\n");
 +			goto enabling_err;
 +		}
 +		break;
@@ -508,7 +510,7 @@ index 817247e..b4f0d82 100644
  	{ }
  };
  MODULE_DEVICE_TABLE(hid, kye_devices);
-@@ -52,6 +416,7 @@ MODULE_DEVICE_TABLE(hid, kye_devices);
+@@ -52,6 +418,7 @@ MODULE_DEVICE_TABLE(hid, kye_devices);
  static struct hid_driver kye_driver = {
  	.name = "kye",
  	.id_table = kye_devices,
@@ -530,5 +532,5 @@ index a2594e5..1253273 100644
  };
  
 -- 
-1.7.9.1
+1.7.2.5
 
