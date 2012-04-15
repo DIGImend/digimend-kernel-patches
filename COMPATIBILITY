@@ -2,24 +2,24 @@ The table below shows tablet support added by patches for
 corresponding kernels (P) as well as tablet support already
 present in the upstream kernels (u), i.e. not requiring a patch.
 
-VID:PID     Original model                      stable  stable  stable      vanilla vanilla vanilla
-                                                3.2.9   3.0.28  2.6.39.2    2.6.36  2.6.35  2.6.32
+VID:PID     Original model                      stable  stable
+                                                3.2.9   3.0.28
 
 0458:5010   KYE EasyPen i405X                   P       P
 0458:5011   KYE MousePen i608X                  P       P
 0458:5013   KYE EasyPen M610X                   P       P
-172f:0032   Waltop Slim Tablet 5.8"             u       u       u           P       P       P
-172f:0034   Waltop Slim Tablet 12.1"            u       u       u           P       P       P
-172f:0037   Waltop Q Pad                        P       P       P           P       P       P
+172f:0032   Waltop Slim Tablet 5.8"             u       u
+172f:0034   Waltop Slim Tablet 12.1"            u       u
+172f:0037   Waltop Q Pad                        P       P
 172F:0038   Waltop PID 0038                     P       P
-172f:0500   Waltop Media Tablet 14.1"           u       u       u           P       P       P
-172f:0501   Waltop Media Tablet 10.6"           u       u       u           P       P       P
+172f:0500   Waltop Media Tablet 14.1"           u       u
+172f:0501   Waltop Media Tablet 10.6"           u       u
 172F:0502   Waltop Sirius Battery Free Tablet   P       P
-5543:0003   UC-Logic Tablet WP4030U             u       u       u           P       P       P
-5543:0004   UC-Logic Tablet WP5540U             u       u       u           P       P       P
-5543:0005   UC-Logic Tablet WP8060U             u       u       u           P       P       P
-5543:0042   UC-Logic Tablet PF1209              u       u       u           P       P       P
-5543:0064   UC-Logic Tablet WP1062              u       P       P           P       P       P
+5543:0003   UC-Logic Tablet WP4030U             u       u
+5543:0004   UC-Logic Tablet WP5540U             u       u
+5543:0005   UC-Logic Tablet WP8060U             u       u
+5543:0042   UC-Logic Tablet PF1209              u       u
+5543:0064   UC-Logic Tablet WP1062              u       P
 
 For detailed support information and rebranded model names see
 tablet support status page at
