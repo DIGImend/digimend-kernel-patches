@@ -1,3 +1,28 @@
+2012-04-16: 5
+    * Switched version numbering to have only one number for simplicity.
+    * Patches for three stable kernel versions are provided: 2.6.32.59,
+      3.0.28, 3.2.9.
+    * 15 tablets are supported, either through patches or in the upstream
+      kernels:
+        KYE EasyPen i405X
+        KYE MousePen i608X
+        KYE EasyPen M610X
+        Waltop Slim Tablet 5.8"
+        Waltop Slim Tablet 12.1"
+        Waltop Q Pad
+        Waltop PID 0038
+        Waltop Media Tablet 14.1"
+        Waltop Media Tablet 10.6"
+        Waltop Sirius Battery Free Tablet
+        UC-Logic Tablet WP4030U
+        UC-Logic Tablet WP5540U
+        UC-Logic Tablet WP8060U
+        UC-Logic Tablet PF1209
+        UC-Logic Tablet WP1062
+      see COMPATIBILITY for details.
+    * The compatibility table is simplified and the details are moved to a
+      wiki page linked therein.
+
 2010-12-26: 0.4
     * Fix absolute axis resolution calculation patch to produce units/mm
       instead of units/inch for ABS_[XYZ].
