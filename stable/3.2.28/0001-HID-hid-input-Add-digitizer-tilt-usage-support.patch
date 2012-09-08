@@ -1,0 +1,73 @@
+From 2de3d565e44c782a287355e760f8e2510dcb47a9 Mon Sep 17 00:00:00 2001
+From: Nikolai Kondrashov <spbnick@gmail.com>
+Date: Tue, 20 Mar 2012 16:01:32 +0200
+Subject: [PATCH 1/4] HID: hid-input: Add digitizer tilt usage support
+
+Add digitizer X Tilt and Y Tilt usage support along with resolution calculation.
+
+Signed-off-by: Nikolai Kondrashov <spbnick@gmail.com>
+Signed-off-by: Jiri Kosina <jkosina@suse.cz>
+---
+ drivers/hid/hid-input.c |   25 ++++++++++++++++++++++---
+ 1 file changed, 22 insertions(+), 3 deletions(-)
+
+diff --git a/drivers/hid/hid-input.c b/drivers/hid/hid-input.c
+index f333139..bd995f1 100644
+--- a/drivers/hid/hid-input.c
++++ b/drivers/hid/hid-input.c
+@@ -223,7 +223,10 @@ static __s32 hidinput_calc_abs_res(const struct hid_field *field, __u16 code)
+ 	 * Verify and convert units.
+ 	 * See HID specification v1.11 6.2.2.7 Global Items for unit decoding
+ 	 */
+-	if (code == ABS_X || code == ABS_Y || code == ABS_Z) {
++	switch (code) {
++	case ABS_X:
++	case ABS_Y:
++	case ABS_Z:
+ 		if (field->unit == 0x11) {		/* If centimeters */
+ 			/* Convert to millimeters */
+ 			unit_exponent += 1;
+@@ -237,7 +240,13 @@ static __s32 hidinput_calc_abs_res(const struct hid_field *field, __u16 code)
+ 		} else {
+ 			return 0;
+ 		}
+-	} else if (code == ABS_RX || code == ABS_RY || code == ABS_RZ) {
++		break;
++
++	case ABS_RX:
++	case ABS_RY:
++	case ABS_RZ:
++	case ABS_TILT_X:
++	case ABS_TILT_Y:
+ 		if (field->unit == 0x14) {		/* If degrees */
+ 			/* Convert to radians */
+ 			prev = logical_extents;
+@@ -248,7 +257,9 @@ static __s32 hidinput_calc_abs_res(const struct hid_field *field, __u16 code)
+ 		} else if (field->unit != 0x12) {	/* If not radians */
+ 			return 0;
+ 		}
+-	} else {
++		break;
++
++	default:
+ 		return 0;
+ 	}
+ 
+@@ -459,6 +470,14 @@ static void hidinput_configure_usage(struct hid_input *hidinput, struct hid_fiel
+ 			map_key_clear(BTN_TOOL_RUBBER);
+ 			break;
+ 
++		case 0x3d: /* X Tilt */
++			map_abs_clear(ABS_TILT_X);
++			break;
++
++		case 0x3e: /* Y Tilt */
++			map_abs_clear(ABS_TILT_Y);
++			break;
++
+ 		case 0x33: /* Touch */
+ 		case 0x42: /* TipSwitch */
+ 		case 0x43: /* TipSwitch2 */
+-- 
+1.7.10.4
+
