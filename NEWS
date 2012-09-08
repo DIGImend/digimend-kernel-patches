@@ -1,3 +1,10 @@
+2012-09-08: 6
+    * Add patches for stable kernels 3.0.42 and 3.2.28 and Ubuntu kernel
+      3.2.0-30.48 with all the previously supported tablets, plus UC-Logic
+      Wireless Tablet TWHL850 and UC-Logic Tablet TWHA60.
+    * Remove patches for stable kernels 2.6.32.59, 3.0.28 and 3.2.9 to
+      reduce maintenance load.
+
 2012-04-16: 5
     * Switched version numbering to have only one number for simplicity.
     * Patches for three stable kernel versions are provided: 2.6.32.59,
