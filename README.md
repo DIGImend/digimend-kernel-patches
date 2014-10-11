@@ -1,4 +1,4 @@
-digimend-kernel-patches
+DIGimend kernel patches
 =======================
 
 The digimend-kernel-patches package contains patches for a few older Linux
